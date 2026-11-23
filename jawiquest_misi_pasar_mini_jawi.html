@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>JawiQuest: Misi Pasar Mini Jawi (Tahun 2)</title>
+
+  <!-- Tailwind CSS untuk susun atur responsif -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Fredoka & Nunito untuk UI ceria, Amiri & Noto Naskh Arabic untuk tulisan Jawi jelas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================================
+       GAYA KARTUN 3D, TIPOGRAFI & ANIMASI PERMAINAN JAWIQUEST
+       ===================================================================== */
+    :root {
+      --purple-soft: #c084fc;
+      --purple-bright: #7c3aed;
+      --purple-dark: #5b21b6;
+      --yellow-sunny: #facc15;
+      --yellow-light: #fef08a;
+      --green-fresh: #22c55e;
+      --blue-sky: #38bdf8;
+      --cream-bg: #fefce8;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--cream-bg);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(192, 132, 252, 0.22) 0%, transparent 35%),
+        radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.22) 0%, transparent 38%),
+        radial-gradient(circle at 50% 90%, rgba(250, 204, 21, 0.25) 0%, transparent 45%),
+        linear-gradient(180deg, #f3e8ff 0%, #fefce8 45%, #e0f2fe 100%);
+      color: #1e1b4b;
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .font-display {
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+    }
+
+    /* Tulisan Jawi standard RTL dengan kebolehbacaan tinggi untuk murid Tahun 2 */
+    .jawi-text {
+      font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+      direction: rtl;
+      unicode-bidi: isolate;
+      line-height: 1.75;
+      letter-spacing: 0;
+    }
+
+    /* Butang 3D Kartun dengan kesan timbul dan tekan */
+    .btn-3d {
+      position: relative;
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, filter 0.15s ease;
+      box-shadow: 0 6px 0 rgba(30, 27, 75, 0.22), 0 10px 18px rgba(30, 27, 75, 0.14);
+    }
+
+    .btn-3d::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 10px;
+      right: 10px;
+      height: 32%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .btn-3d:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+    }
+
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 rgba(30, 27, 75, 0.25), 0 4px 8px rgba(30, 27, 75, 0.12);
+    }
+
+    .btn-3d:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* Kad 3D lembut */
+    .card-3d {
+      background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
+      border: 3px solid #e9d5ff;
+      box-shadow: 0 10px 0 #d8b4fe, 0 18px 30px rgba(88, 28, 135, 0.14);
+    }
+
+    /* Reka bentuk Rak Pasar Mini 3D */
+    .shelf-board {
+      background: linear-gradient(180deg, #fde68a 0%, #f59e0b 75%, #b45309 100%);
+      border-top: 3px solid #fef3c7;
+      border-bottom: 5px solid #78350f;
+      box-shadow: 0 10px 15px -3px rgba(120, 53, 15, 0.35);
+    }
+
+    .shelf-backwall {
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.25) 0px,
+          rgba(255, 255, 255, 0.25) 28px,
+          rgba(192, 132, 252, 0.08) 28px,
+          rgba(192, 132, 252, 0.08) 56px
+        ),
+        linear-gradient(180deg, #f5f3ff 0%, #ede9fe 100%);
+      border: 4px solid #c084fc;
+      box-shadow: inset 0 8px 20px rgba(109, 40, 217, 0.12), 0 12px 0 #a855f7;
+    }
+
+    /* Kad Barang di atas Rak */
+    .product-card {
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 20px rgba(124, 58, 237, 0.22);
+    }
+
+    .product-card:active {
+      transform: scale(0.95);
+    }
+
+    /* Animasi Pintu Kaca Pasar Mini Terbuka */
+    .door-left,
+    .door-right {
+      transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .doors-open .door-left {
+      transform: translateX(-96%);
+    }
+
+    .doors-open .door-right {
+      transform: translateX(96%);
+    }
+
+    .storefront-zoom {
+      transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+    }
+
+    .doors-open.storefront-zoom {
+      transform: scale(1.14);
+    }
+
+    /* Animasi Terapung Ceria */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .animate-float {
+      animation: floatSlow 3.2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.65), 0 6px 0 #15803d; }
+      50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0), 0 6px 0 #15803d; }
+    }
+
+    .ready-checkout-pulse {
+      animation: pulseGlow 1.6s infinite;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+      70% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .animate-pop-in {
+      animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* Animasi Tali Sawat & Pengimbas Kaunter */
+    @keyframes beltMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 0; }
+    }
+
+    .conveyor-belt {
+      background: repeating-linear-gradient(
+        90deg,
+        #334155 0px,
+        #334155 18px,
+        #475569 18px,
+        #475569 24px
+      );
+      animation: beltMove 1.1s linear infinite;
+    }
+
+    @keyframes laserSweep {
+      0%, 100% { opacity: 0.35; transform: scaleX(0.92); }
+      50% { opacity: 1; transform: scaleX(1.05); }
+    }
+
+    .scanner-laser {
+      animation: laserSweep 0.45s ease-in-out infinite;
+    }
+
+    /* Konfeti Perayaan */
+    @keyframes confettiFall {
+      0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg); opacity: 0.85; }
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      z-index: 100;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+
+    /* Skrolbar kemas */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f3e8ff;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c084fc;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-purple-300 selection:text-purple-950">
+
+  <!-- Lapisan Konfeti Dinamik -->
+  <div id="confetti-layer" aria-hidden="true"></div>
+
+  <!-- Lapisan Animasi Barang Terbang ke Troli -->
+  <div id="flying-layer" class="fixed inset-0 pointer-events-none z-50" aria-hidden="true"></div>
+
+  <!-- Toast / Mesej Maklum Balas Mesra -->
+  <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md pointer-events-none flex flex-col items-center gap-2"></div>
+
+  <!-- =====================================================================
+       1. HALAMAN PERMULAAN (START SCREEN)
+       ===================================================================== -->
+  <main id="screen-start" class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-4xl">
+      <!-- Lencana Siri Pembelajaran -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-600 text-white font-display text-sm sm:text-base shadow-md border-2 border-purple-300">
+          <span>✨</span> JawiQuest: Misi Dunia Jawi • Tahun 2
+        </span>
+
+        <!-- Butang ON/OFF Sound Effects -->
+        <button id="btn-sound-start" type="button" onclick="toggleSound()"
+          class="btn-3d inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-extrabold text-sm border-2 border-sky-200 cursor-pointer">
+          <span class="sound-icon text-lg">🔊</span>
+          <span class="sound-label">Bunyi: ON</span>
+        </button>
+      </div>
+
+      <!-- Kad Utama Halaman Permulaan -->
+      <div id="storefront-card" class="storefront-zoom card-3d rounded-3xl p-5 sm:p-8 relative overflow-hidden">
+        <!-- Tajuk Utama -->
+        <div class="text-center mb-5">
+          <h1 class="font-display text-3xl sm:text-5xl font-bold text-purple-800 tracking-tight drop-shadow-sm">
+            JAWIQUEST: MISI PASAR MINI JAWI
+          </h1>
+          <p class="mt-2.5 text-base sm:text-lg font-bold text-slate-700 max-w-2xl mx-auto leading-relaxed">
+            "Selamat datang ke Pasar Mini JawiQuest! Bantu kami mencari barang berdasarkan senarai belian Jawi. Bersedia untuk membeli-belah?"
+          </p>
+        </div>
+
+        <!-- Ilustrasi Bangunan Pasar Mini 3D + Maskot Murid Lelaki & Perempuan + Pintu Kaca Animasi -->
+        <div class="relative mx-auto max-w-2xl my-4">
+          <div class="bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-100 rounded-3xl p-4 sm:p-6 border-4 border-purple-300 shadow-inner relative overflow-hidden">
+            <!-- Awan Kartun -->
+            <div class="absolute top-3 left-6 w-16 h-6 bg-white/80 rounded-full blur-[0.5px]"></div>
+            <div class="absolute top-5 right-10 w-20 h-7 bg-white/80 rounded-full blur-[0.5px]"></div>
+
+            <!-- Papan Tanda Pasar Mini -->
+            <div class="relative z-20 mx-auto max-w-md bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-700 text-yellow-300 font-display font-bold text-lg sm:text-2xl text-center py-2.5 px-4 rounded-2xl border-4 border-yellow-300 shadow-lg tracking-wide">
+              🏪 PASAR MINI JAWIQUEST
+            </div>
+
+            <!-- Sengkuap (Awning) Berjalur Ungu & Kuning -->
+            <div class="relative z-10 mx-auto max-w-lg h-7 -mt-1 rounded-b-xl overflow-hidden grid grid-cols-8 border-x-4 border-b-4 border-purple-800 shadow-md">
+              <div class="bg-yellow-400"></div>
+              <div class="bg-purple-600"></div>
+              <div class="bg-yellow-400"></div>
+              <div class="bg-purple-600"></div>
+              <div class="bg-yellow-400"></div>
+              <div class="bg-purple-600"></div>
+              <div class="bg-yellow-400"></div>
+              <div class="bg-purple-600"></div>
+            </div>
+
+            <!-- Bahagian Hadapan Kedai & Maskot -->
+            <div class="grid grid-cols-12 items-end gap-2 mt-2 pt-2">
+              <!-- Maskot Murid Lelaki -->
+              <div class="col-span-3 flex flex-col items-center animate-float" style="animation-delay: 0.2s;">
+                <svg viewBox="0 0 120 155" class="w-20 sm:w-28 h-auto drop-shadow-md" aria-label="Maskot Murid Lelaki">
+                  <!-- Badan / Baju Sekolah -->
+                  <rect x="34" y="88" width="52" height="52" rx="16" fill="#38bdf8" stroke="#0369a1" stroke-width="3"/>
+                  <path d="M46 88 L60 105 L74 88" fill="#ffffff" stroke="#0369a1" stroke-width="2.5"/>
+                  <!-- Lencana -->
+                  <circle cx="72" cy="108" r="5" fill="#facc15" stroke="#854d0e" stroke-width="1.5"/>
+                  <!-- Tangan Melambai -->
+                  <path d="M34 98 Q14 82 22 64" fill="none" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+                  <circle cx="22" cy="63" r="7" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
+                  <path d="M86 98 Q102 112 96 128" fill="none" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+                  <!-- Kepala -->
+                  <circle cx="60" cy="54" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <!-- Songkok -->
+                  <path d="M31 40 Q32 16 60 16 Q88 16 89 40 Z" fill="#1e1b4b" stroke="#0f172a" stroke-width="2.5"/>
+                  <rect x="31" y="34" width="58" height="6" rx="3" fill="#7c3aed"/>
+                  <!-- Mata & Senyuman -->
+                  <circle cx="49" cy="53" r="4" fill="#1e1b4b"/>
+                  <circle cx="71" cy="53" r="4" fill="#1e1b4b"/>
+                  <circle cx="50.5" cy="51.5" r="1.4" fill="#ffffff"/>
+                  <circle cx="72.5" cy="51.5" r="1.4" fill="#ffffff"/>
+                  <circle cx="42" cy="61" r="4.5" fill="#fda4af" opacity="0.7"/>
+                  <circle cx="78" cy="61" r="4.5" fill="#fda4af" opacity="0.7"/>
+                  <path d="M49 65 Q60 76 71 65" fill="none" stroke="#9a3412" stroke-width="3.2" stroke-linecap="round"/>
+                </svg>
+              </div>
+
+              <!-- Pintu Masuk Kaca Pasar Mini (Boleh Terbuka Secara Animasi) -->
+              <div class="col-span-6">
+                <div id="entrance-door-frame" class="relative h-40 sm:h-48 bg-amber-100 rounded-t-2xl border-4 border-purple-800 overflow-hidden shadow-inner">
+                  <!-- Bahagian Dalam Kedai yang Kelihatan Bila Pintu Terbuka -->
+                  <div class="absolute inset-0 bg-gradient-to-b from-purple-100 via-yellow-50 to-emerald-100 flex flex-col items-center justify-center p-2">
+                    <div class="text-2xl sm:text-3xl mb-1">🍎 🥖 🥛 🍌</div>
+                    <span class="px-3 py-1 rounded-full bg-green-500 text-white font-display font-bold text-xs sm:text-sm shadow">
+                      JOM MASUK!
+                    </span>
+                  </div>
+
+                  <!-- Pintu Kaca Kiri -->
+                  <div class="door-left absolute top-0 left-0 w-1/2 h-full bg-gradient-to-br from-sky-200/90 to-sky-400/85 border-r-2 border-purple-900 flex items-center justify-end pr-2 backdrop-blur-[1px]">
+                    <div class="w-1.5 h-12 rounded-full bg-yellow-300 border border-amber-700"></div>
+                    <span class="absolute top-3 left-2 text-[10px] font-extrabold text-purple-900 bg-white/80 px-1.5 py-0.5 rounded">BUKA</span>
+                  </div>
+
+                  <!-- Pintu Kaca Kanan -->
+                  <div class="door-right absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-sky-200/90 to-sky-400/85 border-l-2 border-purple-900 flex items-center justify-start pl-2 backdrop-blur-[1px]">
+                    <div class="w-1.5 h-12 rounded-full bg-yellow-300 border border-amber-700"></div>
+                    <span class="absolute bottom-3 right-2 text-[10px] font-extrabold text-purple-900 bg-yellow-300 px-1.5 py-0.5 rounded">JAWI</span>
+                  </div>
+                </div>
+                <!-- Tangga / Lantai Pintu -->
+                <div class="h-3 bg-purple-800 rounded-b-lg"></div>
+              </div>
+
+              <!-- Maskot Murid Perempuan -->
+              <div class="col-span-3 flex flex-col items-center animate-float" style="animation-delay: 0.7s;">
+                <svg viewBox="0 0 120 155" class="w-20 sm:w-28 h-auto drop-shadow-md" aria-label="Maskot Murid Perempuan">
+                  <!-- Badan / Baju Kurung & Pinafore Ceria -->
+                  <path d="M32 90 L88 90 L94 142 L26 142 Z" fill="#a855f7" stroke="#581c87" stroke-width="3" stroke-linejoin="round"/>
+                  <!-- Tudung -->
+                  <path d="M26 55 Q26 18 60 18 Q94 18 94 55 Q96 95 60 104 Q24 95 26 55 Z" fill="#facc15" stroke="#a16207" stroke-width="3"/>
+                  <!-- Muka -->
+                  <circle cx="60" cy="56" r="26" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5"/>
+                  <!-- Tangan Melambai -->
+                  <path d="M88 98 Q106 82 98 64" fill="none" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+                  <circle cx="98" cy="63" r="7" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
+                  <path d="M32 98 Q18 112 24 128" fill="none" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+                  <!-- Mata & Senyuman -->
+                  <circle cx="50" cy="54" r="3.8" fill="#1e1b4b"/>
+                  <circle cx="70" cy="54" r="3.8" fill="#1e1b4b"/>
+                  <circle cx="51.3" cy="52.5" r="1.3" fill="#ffffff"/>
+                  <circle cx="71.3" cy="52.5" r="1.3" fill="#ffffff"/>
+                  <circle cx="43" cy="62" r="4" fill="#fda4af" opacity="0.75"/>
+                  <circle cx="77" cy="62" r="4" fill="#fda4af" opacity="0.75"/>
+                  <path d="M50 66 Q60 76 70 66" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilihan Nama Pemain -->
+        <div class="max-w-xl mx-auto mt-5 bg-purple-50/90 p-4 rounded-2xl border-2 border-purple-200">
+          <label for="player-name-input" class="block text-center font-display font-bold text-purple-900 text-base sm:text-lg mb-2">
+            ✏️ Tulis atau Pilih Nama Pelanggan Cilik:
+          </label>
+          <input
+            id="player-name-input"
+            type="text"
+            maxlength="20"
+            placeholder="Contoh: Aisyah / Adam"
+            value="Aisyah"
+            class="w-full text-center font-display font-bold text-lg sm:text-xl text-purple-950 bg-white border-3 border-purple-300 focus:border-purple-600 focus:outline-none rounded-2xl py-2.5 px-4 shadow-inner"
+          />
+          <!-- Butang Pilihan Nama Pantas -->
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-2.5">
+            <button type="button" onclick="selectQuickName('Aisyah')" class="px-3 py-1 rounded-full bg-purple-200 hover:bg-purple-300 text-purple-900 font-bold text-xs sm:text-sm cursor-pointer transition">👧 Aisyah</button>
+            <button type="button" onclick="selectQuickName('Adam')" class="px-3 py-1 rounded-full bg-sky-200 hover:bg-sky-300 text-sky-900 font-bold text-xs sm:text-sm cursor-pointer transition">👦 Adam</button>
+            <button type="button" onclick="selectQuickName('Zara')" class="px-3 py-1 rounded-full bg-yellow-200 hover:bg-yellow-300 text-yellow-900 font-bold text-xs sm:text-sm cursor-pointer transition">👧 Zara</button>
+            <button type="button" onclick="selectQuickName('Rayyan')" class="px-3 py-1 rounded-full bg-emerald-200 hover:bg-emerald-300 text-emerald-900 font-bold text-xs sm:text-sm cursor-pointer transition">👦 Rayyan</button>
+          </div>
+        </div>
+
+        <!-- Butang Tindakan Utama -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+          <button id="btn-start-game" type="button" onclick="startGameWithDoorAnimation()"
+            class="btn-3d w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-b from-green-400 to-green-600 text-white font-display font-bold text-xl sm:text-2xl border-2 border-green-200 cursor-pointer flex items-center justify-center gap-3">
+            <span>🛒</span> MULA MEMBELI-BELAH
+          </button>
+
+          <button type="button" onclick="openHowToPlay()"
+            class="btn-3d w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-b from-yellow-300 to-amber-400 text-amber-950 font-display font-bold text-lg sm:text-xl border-2 border-yellow-100 cursor-pointer flex items-center justify-center gap-2">
+            <span>📖</span> CARA BERMAIN
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =====================================================================
+       2. RUANG MEMBELI-BELAH PASAR MINI (SHOPPING FLOOR)
+       ===================================================================== -->
+  <section id="screen-market" class="hidden min-h-screen flex flex-col">
+    <!-- Bar Status Atas (HUD) -->
+    <header class="sticky top-0 z-30 bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-700 text-white px-3 sm:px-6 py-2.5 shadow-lg border-b-4 border-yellow-300">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <!-- Info Pemain & Misi Semasa -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-white/25 flex items-center gap-2">
+            <span class="text-lg">🛍️</span>
+            <div>
+              <div id="hud-player-name" class="font-display font-bold text-xs sm:text-sm text-yellow-300 leading-tight">Aisyah</div>
+              <div id="hud-mission-badge" class="text-[11px] sm:text-xs font-extrabold text-white/95">MISI 1: E-PEPET</div>
+            </div>
+          </div>
+
+          <!-- Kaunter Syiling -->
+          <div class="bg-amber-400 text-amber-950 px-3 py-1.5 rounded-xl border-2 border-yellow-200 shadow font-display font-bold flex items-center gap-1.5">
+            <span class="text-lg">🪙</span>
+            <span id="hud-coins" class="text-sm sm:text-base">0</span>
+          </div>
+        </div>
+
+        <!-- Butang Kawalan HUD -->
+        <div class="flex items-center gap-2">
+          <!-- Butang Toggle Senarai Belian -->
+          <button type="button" onclick="toggleShoppingListPanel()"
+            class="btn-3d px-3 py-2 rounded-xl bg-yellow-300 hover:bg-yellow-200 text-purple-950 font-display font-bold text-xs sm:text-sm border border-yellow-100 cursor-pointer flex items-center gap-1.5">
+            <span>📋</span>
+            <span class="hidden md:inline">SENARAI BELIAN</span>
+            <span id="hud-list-progress" class="bg-purple-700 text-white px-2 py-0.5 rounded-full text-xs">0/4</span>
+          </button>
+
+          <!-- Butang Lihat Troli -->
+          <button id="btn-view-trolley" type="button" onclick="openTrolleyModal()"
+            class="btn-3d px-3 py-2 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-display font-bold text-xs sm:text-sm border border-emerald-200 cursor-pointer flex items-center gap-1.5">
+            <span>🛒</span>
+            <span class="hidden sm:inline">LIHAT TROLI</span>
+            <span id="hud-cart-count" class="bg-emerald-900 text-white px-2 py-0.5 rounded-full text-xs">0</span>
+          </button>
+
+          <!-- Butang Bunyi -->
+          <button type="button" onclick="toggleSound()"
+            class="btn-3d px-3 py-2 rounded-xl bg-sky-300 hover:bg-sky-200 text-slate-950 font-bold text-xs sm:text-sm border border-sky-100 cursor-pointer flex items-center gap-1"
+            title="Hidup/Matikan Bunyi">
+            <span class="sound-icon">🔊</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Kandungan Utama Pasar Mini -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+
+      <!-- PANEL SENARAI BELIAN JAWI (Kekal Kelihatan & Boleh Buka/Tutup) -->
+      <aside id="shopping-list-panel" class="lg:col-span-4 card-3d rounded-3xl p-4 border-4 border-yellow-300 bg-gradient-to-b from-amber-50 to-yellow-100/90 transition-all">
+        <div class="flex items-center justify-between gap-2 pb-2.5 border-b-2 border-amber-300">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">📝</span>
+            <div>
+              <h2 class="font-display font-bold text-purple-900 text-base sm:text-lg leading-tight">SENARAI BELIAN JAWI</h2>
+              <p id="mission-focus-label" class="text-xs font-bold text-purple-700">Fokus: Vokal e-pepet</p>
+            </div>
+          </div>
+          <button type="button" onclick="toggleShoppingListBody()" id="btn-collapse-list"
+            class="px-2.5 py-1 rounded-xl bg-purple-200 hover:bg-purple-300 text-purple-900 font-extrabold text-xs cursor-pointer">
+            Tutup ▲
+          </button>
+        </div>
+
+        <!-- Kandungan Senarai Perkataan Jawi -->
+        <div id="shopping-list-body" class="mt-3 space-y-2.5">
+          <p class="text-xs font-bold text-amber-900 bg-white/80 px-3 py-1.5 rounded-xl border border-amber-200">
+            💡 Baca ejaan Jawi di bawah dan cari barangnya di rak pasar mini:
+          </p>
+          <ul id="shopping-list-items" class="space-y-2">
+            <!-- Diisi secara dinamik oleh JavaScript -->
+          </ul>
+
+          <!-- Butang Pergi ke Kaunter (Aktif apabila semua barang dalam senarai dikumpulkan) -->
+          <div class="pt-2">
+            <button id="btn-go-checkout" type="button" onclick="goToCheckout()"
+              class="btn-3d w-full py-3.5 px-4 rounded-2xl bg-gradient-to-b from-green-400 to-green-600 text-white font-display font-bold text-base sm:text-lg border-2 border-green-200 cursor-pointer flex items-center justify-center gap-2">
+              <span>🧾</span> PERGI KE KAUNTER
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- KAWASAN RAK BARANGAN PASAR MINI -->
+      <div id="shelf-column" class="lg:col-span-8 flex flex-col gap-3">
+        <!-- Tab Navigasi 4 Kawasan Rak -->
+        <nav aria-label="Kawasan Rak Pasar Mini" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button type="button" onclick="switchShelf(0)" data-shelf-tab="0"
+            class="shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2">
+            🍎 Buah & Sayur
+          </button>
+          <button type="button" onclick="switchShelf(1)" data-shelf-tab="1"
+            class="shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2">
+            🍞 Rak Makanan
+          </button>
+          <button type="button" onclick="switchShelf(2)" data-shelf-tab="2"
+            class="shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2">
+            🎒 Keperluan Harian
+          </button>
+          <button type="button" onclick="switchShelf(3)" data-shelf-tab="3"
+            class="shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2">
+            ⭐ Cabaran Jawi
+          </button>
+        </nav>
+
+        <!-- Paparan Rak Semasa -->
+        <div class="shelf-backwall rounded-3xl p-4 sm:p-6 relative">
+          <!-- Papan Tanda Nama Rak -->
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div class="inline-flex items-center gap-2.5 bg-purple-700 text-yellow-300 px-4 py-2 rounded-2xl border-2 border-yellow-300 shadow-md">
+              <span id="current-shelf-icon" class="text-2xl">🍎</span>
+              <div>
+                <h3 id="current-shelf-title" class="font-display font-bold text-base sm:text-xl leading-tight">
+                  Rak Buah-buahan dan Sayur-sayuran
+                </h3>
+                <p id="current-shelf-subtitle" class="text-xs text-purple-100 font-semibold">
+                  Tekan barang untuk masukkan ke dalam troli
+                </p>
+              </div>
+            </div>
+
+            <span id="shelf-page-indicator" class="px-3 py-1 rounded-full bg-white/90 text-purple-900 font-display font-bold text-xs sm:text-sm border-2 border-purple-300">
+              Rak 1 / 4
+            </span>
+          </div>
+
+          <!-- Grid Barang di atas Rak 3D -->
+          <div id="shelf-items-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            <!-- Kad barang dijana oleh JavaScript -->
+          </div>
+
+          <!-- Papan Lantai Rak Kayu 3D di Bahagian Bawah -->
+          <div class="shelf-board h-4 rounded-xl mt-5"></div>
+
+          <!-- Butang Navigasi Rak Sebelumnya & Rak Seterusnya -->
+          <div class="flex items-center justify-between gap-3 mt-5">
+            <button type="button" onclick="prevShelf()"
+              class="btn-3d flex-1 sm:flex-initial px-5 py-3 rounded-2xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-display font-bold text-sm sm:text-base border-2 border-sky-200 cursor-pointer flex items-center justify-center gap-2">
+              <span>⬅️</span> RAK SEBELUMNYA
+            </button>
+
+            <button type="button" onclick="nextShelf()"
+              class="btn-3d flex-1 sm:flex-initial px-5 py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-display font-bold text-sm sm:text-base border-2 border-purple-300 cursor-pointer flex items-center justify-center gap-2">
+              RAK SETERUSNYA <span>➡️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       3. KAUNTER PEMBAYARAN (CHECKOUT COUNTER)
+       ===================================================================== -->
+  <section id="screen-counter" class="hidden min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-4xl card-3d rounded-3xl p-5 sm:p-8">
+      <!-- Tajuk Kaunter -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b-4 border-purple-200">
+        <div class="flex items-center gap-3">
+          <div class="w-14 h-14 rounded-2xl bg-yellow-300 border-3 border-amber-500 flex items-center justify-center text-3xl shadow">
+            🏪
+          </div>
+          <div>
+            <h2 class="font-display text-2xl sm:text-3xl font-bold text-purple-900">KAUNTER PEMBAYARAN JAWIQUEST</h2>
+            <p class="text-sm font-bold text-slate-600">Semak barang dalam troli dan imbas di kaunter!</p>
+          </div>
+        </div>
+
+        <button type="button" onclick="backToMarketFromCounter()" id="btn-back-market"
+          class="btn-3d px-4 py-2 rounded-xl bg-purple-200 hover:bg-purple-300 text-purple-950 font-display font-bold text-xs sm:text-sm cursor-pointer">
+          ⬅️ Kembali ke Rak
+        </button>
+      </div>
+
+      <!-- Ilustrasi Juruwang & Mesin Pengimbas Animasi -->
+      <div class="my-5 bg-gradient-to-b from-sky-100 to-purple-100 rounded-3xl p-4 sm:p-6 border-4 border-purple-300 relative overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <!-- Juruwang Mesra -->
+          <div class="md:col-span-4 flex flex-col items-center">
+            <svg viewBox="0 0 140 130" class="w-32 sm:w-36 h-auto drop-shadow" aria-label="Juruwang Pasar Mini">
+              <!-- Badan Juruwang -->
+              <rect x="35" y="75" width="70" height="48" rx="14" fill="#22c55e" stroke="#15803d" stroke-width="3"/>
+              <path d="M55 75 L70 92 L85 75" fill="#facc15"/>
+              <!-- Kepala -->
+              <circle cx="70" cy="46" r="26" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+              <!-- Topi Juruwang -->
+              <path d="M44 38 Q46 18 70 18 Q94 18 96 38 Z" fill="#7c3aed" stroke="#4c1d95" stroke-width="2.5"/>
+              <rect x="42" y="35" width="64" height="6" rx="3" fill="#facc15"/>
+              <!-- Mata & Senyuman -->
+              <circle cx="61" cy="46" r="3.5" fill="#1e1b4b"/>
+              <circle cx="79" cy="46" r="3.5" fill="#1e1b4b"/>
+              <path d="M60 56 Q70 65 80 56" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <span class="mt-1 px-3 py-1 rounded-full bg-white text-purple-900 font-display font-bold text-xs shadow border border-purple-200">
+              Juruwang JawiQuest
+            </span>
+          </div>
+
+          <!-- Tali Sawat & Pengimbas Laser -->
+          <div class="md:col-span-8 flex flex-col items-center">
+            <div class="w-full bg-white/90 rounded-2xl p-4 border-3 border-purple-300 shadow-inner relative">
+              <!-- Mesin Pengimbas Merah -->
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-purple-700">Zon Imbasan Kod Bar</span>
+                <div class="px-3 py-1 rounded-lg bg-slate-900 text-emerald-400 font-mono font-bold text-sm sm:text-base shadow">
+                  JUMLAH: <span id="register-live-total">RM 0.00</span>
+                </div>
+              </div>
+
+              <!-- Ruang Barang Diimbas -->
+              <div id="scanner-stage" class="h-24 rounded-xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center relative overflow-hidden">
+                <div id="scanner-laser-beam" class="hidden scanner-laser absolute inset-y-0 left-1/2 -translate-x-1/2 w-1.5 bg-red-500 shadow-[0_0_15px_#ef4444]"></div>
+                <div id="scanner-active-item" class="flex flex-col items-center justify-center transition-all duration-300">
+                  <span class="text-3xl">📦</span>
+                  <span class="text-xs font-bold text-slate-500 mt-1">Tekan "BAYAR SEKARANG" untuk mengimbas</span>
+                </div>
+              </div>
+
+              <!-- Tali Sawat Bergerak -->
+              <div class="conveyor-belt h-4 rounded-full mt-2 border-2 border-slate-700"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Senarai Item & Ringkasan Harga -->
+      <div class="bg-amber-50 rounded-2xl p-4 border-2 border-amber-300">
+        <h3 class="font-display font-bold text-lg text-purple-900 mb-3 flex items-center justify-between">
+          <span>🛍️ Senarai Barang Dibeli</span>
+          <span id="counter-total-items" class="text-sm bg-purple-200 text-purple-950 px-3 py-1 rounded-full">0 Barang</span>
+        </h3>
+
+        <div id="counter-items-list" class="divide-y divide-amber-200 max-h-60 overflow-y-auto pr-1">
+          <!-- Item kaunter dijana oleh JavaScript -->
+        </div>
+
+        <div class="mt-4 pt-3 border-t-3 border-amber-400 flex items-center justify-between">
+          <span class="font-display font-bold text-lg sm:text-xl text-slate-800">JUMLAH PERLU DIBAYAR:</span>
+          <span id="counter-grand-total" class="font-display font-bold text-2xl sm:text-3xl text-green-700">RM 0.00</span>
+        </div>
+      </div>
+
+      <!-- Butang Bayar Sekarang -->
+      <div class="mt-6 flex justify-center">
+        <button id="btn-pay-now" type="button" onclick="processCheckoutPayment()"
+          class="btn-3d w-full sm:w-auto px-10 py-4 rounded-2xl bg-gradient-to-b from-green-400 to-green-600 text-white font-display font-bold text-xl sm:text-2xl border-2 border-green-200 cursor-pointer flex items-center justify-center gap-3">
+          <span>💳</span> BAYAR SEKARANG
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. RESIT DIGITAL KEJAYAAN (DIGITAL RECEIPT)
+       ===================================================================== -->
+  <section id="screen-receipt" class="hidden min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border-4 border-purple-400 shadow-2xl relative animate-pop-in">
+      <!-- Hiasan Gerigi Atas Resit -->
+      <div class="text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-300 border-4 border-amber-500 text-3xl shadow-md mb-2">
+          🏆
+        </div>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-purple-900 tracking-wide">
+          RESIT KEJAYAAN JAWIQUEST
+        </h2>
+        <p id="receipt-motivational-msg" class="mt-1 font-display font-bold text-lg text-green-600">
+          TAHNIAH! ANDA BERJAYA MENYELESAIKAN MISI MEMBELI-BELAH JAWI!
+        </p>
+      </div>
+
+      <!-- Paparan Bintang Ganjaran -->
+      <div id="receipt-stars" class="flex items-center justify-center gap-3 my-4 text-4xl sm:text-5xl">
+        <span>⭐</span><span>⭐</span><span>⭐</span>
+      </div>
+
+      <!-- Butiran Pelanggan & Misi -->
+      <div class="bg-purple-50 rounded-2xl p-4 border-2 border-dashed border-purple-300 space-y-2 text-sm sm:text-base">
+        <div class="flex justify-between">
+          <span class="font-bold text-slate-600">Nama Pelanggan:</span>
+          <span id="receipt-player-name" class="font-display font-bold text-purple-950">Aisyah</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-bold text-slate-600">Misi Diselesaikan:</span>
+          <span id="receipt-mission-name" class="font-display font-bold text-purple-800">Misi 1 – Beli-Belah E-Pepet</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-bold text-slate-600">Jumlah Barang Betul:</span>
+          <span id="receipt-correct-count" class="font-display font-bold text-emerald-700">4 Barang</span>
+        </div>
+      </div>
+
+      <!-- Senarai Barang Dibeli dalam Tulisan Jawi -->
+      <div class="my-4 bg-amber-50/80 rounded-2xl p-4 border-2 border-amber-200">
+        <h3 class="font-display font-bold text-sm uppercase tracking-wider text-amber-900 mb-2">
+          Senarai Barang Dibeli (Tulisan Jawi):
+        </h3>
+        <ul id="receipt-items-list" class="space-y-2">
+          <!-- Item resit dijana oleh JavaScript -->
+        </ul>
+
+        <div class="mt-3 pt-3 border-t-2 border-dashed border-amber-400 flex justify-between items-center">
+          <span class="font-display font-bold text-base sm:text-lg text-slate-800">Jumlah Harga Pembelian:</span>
+          <span id="receipt-total-price" class="font-display font-bold text-xl text-purple-900">RM 0.00</span>
+        </div>
+      </div>
+
+      <!-- Ringkasan Ganjaran Syiling -->
+      <div class="bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-400 rounded-2xl p-4 border-2 border-amber-500 flex items-center justify-between shadow">
+        <div>
+          <div class="font-display font-bold text-amber-950 text-base sm:text-lg">Syiling Ganjaran Misi Ini:</div>
+          <div id="receipt-coin-breakdown" class="text-xs font-extrabold text-amber-900">+40 syiling barang + 20 bonus lengkap!</div>
+        </div>
+        <div class="flex items-center gap-1.5 bg-white px-4 py-2 rounded-xl border-2 border-amber-500 font-display font-bold text-xl sm:text-2xl text-amber-900">
+          <span>🪙</span>
+          <span id="receipt-coins-earned">+60</span>
+        </div>
+      </div>
+
+      <!-- Butang Navigasi Selepas Resit -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button id="btn-next-mission" type="button" onclick="handleNextMission()"
+          class="btn-3d w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-b from-purple-500 to-purple-700 text-white font-display font-bold text-lg border-2 border-purple-300 cursor-pointer flex items-center justify-center gap-2">
+          <span>🚀</span> MISI SETERUSNYA
+        </button>
+
+        <button type="button" onclick="restartWholeGame()"
+          class="btn-3d w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-display font-bold text-base border-2 border-sky-200 cursor-pointer flex items-center justify-center gap-2">
+          <span>🔄</span> MAIN SEMULA
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. MODAL / POPUP INTERAKTIF (CARA BERMAIN, TROLI, PENGENALAN MISI, LENCANA JUARA)
+       ===================================================================== -->
+
+  <!-- Modal Cara Bermain -->
+  <div id="modal-howto" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="card-3d rounded-3xl max-w-xl w-full p-6 sm:p-7 relative animate-pop-in max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b-2 border-purple-200">
+        <h3 class="font-display text-2xl font-bold text-purple-900 flex items-center gap-2">
+          <span>📖</span> CARA BERMAIN
+        </h3>
+        <button type="button" onclick="closeHowToPlay()" class="w-9 h-9 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div class="mt-4 space-y-3 text-sm sm:text-base font-bold text-slate-700">
+        <div class="flex items-start gap-3 bg-purple-50 p-3 rounded-2xl border border-purple-200">
+          <span class="text-2xl">1️⃣</span>
+          <p><strong class="text-purple-900">Baca Senarai Belian Jawi:</strong> Lihat 4 hingga 5 perkataan Jawi pada senarai belian anda.</p>
+        </div>
+        <div class="flex items-start gap-3 bg-yellow-50 p-3 rounded-2xl border border-yellow-200">
+          <span class="text-2xl">2️⃣</span>
+          <p><strong class="text-amber-900">Teroka 4 Kawasan Rak:</strong> Gunakan butang <span class="text-purple-700">RAK SETERUSNYA</span> atau <span class="text-purple-700">RAK SEBELUMNYA</span> untuk melawat semua rak.</p>
+        </div>
+        <div class="flex items-start gap-3 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
+          <span class="text-2xl">3️⃣</span>
+          <p><strong class="text-emerald-900">Tekan Barang ke Troli:</strong> Padankan ejaan Jawi dengan barang yang betul. Tanda <span class="text-green-600 font-black">✓</span> akan muncul!</p>
+        </div>
+        <div class="flex items-start gap-3 bg-sky-50 p-3 rounded-2xl border border-sky-200">
+          <span class="text-2xl">4️⃣</span>
+          <p><strong class="text-sky-900">Semak Troli & Bayar:</strong> Buang barang salah jika tersilap ambil, kemudian tekan <span class="text-green-700">PERGI KE KAUNTER</span> untuk mendapat resit dan syiling!</p>
+        </div>
+      </div>
+
+      <div class="mt-6 text-center">
+        <button type="button" onclick="closeHowToPlay()"
+          class="btn-3d px-8 py-3 rounded-2xl bg-green-500 text-white font-display font-bold text-lg cursor-pointer">
+          FAHAM! JOM MAIN 👍
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pengenalan Misi -->
+  <div id="modal-mission-intro" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="card-3d rounded-3xl max-w-lg w-full p-6 sm:p-7 text-center animate-pop-in">
+      <div class="inline-block px-4 py-1 rounded-full bg-yellow-300 text-amber-950 font-display font-bold text-sm border-2 border-amber-400 mb-2">
+        🎯 MISI BAHARU
+      </div>
+      <h3 id="intro-mission-title" class="font-display text-2xl sm:text-3xl font-bold text-purple-900">
+        MISI 1 – BELI-BELAH E-PEPET
+      </h3>
+      <p id="intro-mission-desc" class="mt-2 text-sm sm:text-base font-bold text-slate-600">
+        Cari barang berdasarkan perkataan Jawi yang mengandungi vokal e-pepet.
+      </p>
+
+      <div class="mt-4 bg-amber-50 rounded-2xl p-4 border-2 border-amber-300">
+        <div class="text-xs font-extrabold text-amber-900 uppercase mb-2">Senarai Belian Jawi Anda:</div>
+        <div id="intro-mission-words" class="flex flex-wrap items-center justify-center gap-2">
+          <!-- Perkataan Jawi misi dipaparkan di sini -->
+        </div>
+      </div>
+
+      <button type="button" onclick="closeMissionIntro()"
+        class="btn-3d mt-6 w-full py-3.5 rounded-2xl bg-gradient-to-b from-green-400 to-green-600 text-white font-display font-bold text-xl border-2 border-green-200 cursor-pointer">
+        MULA CARI BARANG! 🛒
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Lihat Troli & Buang Barang -->
+  <div id="modal-trolley" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="card-3d rounded-3xl max-w-xl w-full p-5 sm:p-6 animate-pop-in max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b-2 border-purple-200">
+        <h3 class="font-display text-xl sm:text-2xl font-bold text-purple-900 flex items-center gap-2">
+          <span>🛒</span> TROLI SAYA (<span id="modal-trolley-count">0</span> Barang)
+        </h3>
+        <button type="button" onclick="closeTrolleyModal()" class="w-9 h-9 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div id="trolley-alert-banner" class="hidden mt-3 p-3 rounded-2xl bg-amber-100 border-2 border-amber-400 text-amber-950 text-xs sm:text-sm font-bold">
+        ⚠️ Sila buang barang yang bertanda merah (tiada dalam senarai) sebelum ke kaunter pembayaran!
+      </div>
+
+      <div id="trolley-items-container" class="my-4 space-y-2.5 overflow-y-auto flex-1 pr-1">
+        <!-- Item dalam troli dipaparkan di sini -->
+      </div>
+
+      <div class="pt-3 border-t-2 border-purple-200 flex flex-wrap items-center justify-between gap-2">
+        <button type="button" onclick="closeTrolleyModal()"
+          class="btn-3d px-5 py-2.5 rounded-2xl bg-purple-200 hover:bg-purple-300 text-purple-950 font-display font-bold text-sm sm:text-base cursor-pointer">
+          Terus Membeli-belah
+        </button>
+
+        <button id="btn-modal-checkout" type="button" onclick="closeTrolleyModal(); goToCheckout();"
+          class="btn-3d px-5 py-2.5 rounded-2xl bg-green-500 hover:bg-green-400 text-white font-display font-bold text-sm sm:text-base cursor-pointer">
+          PERGI KE KAUNTER 🧾
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Lencana Khas Tamat Ketiga-tiga Misi -->
+  <div id="modal-grand-badge" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="card-3d rounded-3xl max-w-lg w-full p-6 sm:p-8 text-center border-4 border-yellow-300 animate-pop-in">
+      <div class="text-sm font-display font-bold uppercase tracking-wider text-purple-700">
+        🌟 ANUGERAH TERTINGGI JAWIQUEST 🌟
+      </div>
+      <h3 class="font-display text-2xl sm:text-3xl font-bold text-purple-950 mt-1">
+        ANDA JUARA JAWI!
+      </h3>
+
+      <!-- Ilustrasi Lencana Khas 3D -->
+      <div class="my-4 flex justify-center animate-float">
+        <svg viewBox="0 0 180 180" class="w-40 h-40 drop-shadow-xl" aria-label="Lencana Juara Pasar Mini Jawi">
+          <!-- Reben -->
+          <path d="M55 115 L40 168 L68 154 L82 170 L88 120 Z" fill="#7c3aed" stroke="#4c1d95" stroke-width="3"/>
+          <path d="M125 115 L140 168 L112 154 L98 170 L92 120 Z" fill="#9333ea" stroke="#4c1d95" stroke-width="3"/>
+          <!-- Pingat Emas -->
+          <circle cx="90" cy="78" r="58" fill="#facc15" stroke="#b45309" stroke-width="5"/>
+          <circle cx="90" cy="78" r="46" fill="#fef08a" stroke="#d97706" stroke-width="3" stroke-dasharray="6 4"/>
+          <text x="90" y="68" text-anchor="middle" font-size="30">👑</text>
+          <text x="90" y="96" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="bold" font-size="14" fill="#78350f">JUARA JAWI</text>
+          <text x="90" y="112" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="bold" font-size="11" fill="#92400e">PASAR MINI</text>
+        </svg>
+      </div>
+
+      <p id="grand-badge-summary" class="font-bold text-slate-700 text-sm sm:text-base">
+        Syabas! Anda berjaya menamatkan ketiga-tiga misi membeli-belah Jawi dengan cemerlang!
+      </p>
+
+      <div class="mt-3 inline-flex items-center gap-2 px-5 py-2 rounded-2xl bg-yellow-300 border-2 border-amber-500 font-display font-bold text-xl text-amber-950">
+        <span>🪙 Jumlah Syiling Terkumpul:</span>
+        <span id="grand-total-coins">0</span>
+      </div>
+
+      <div class="mt-6">
+        <button type="button" onclick="restartWholeGame()"
+          class="btn-3d w-full py-3.5 rounded-2xl bg-gradient-to-b from-purple-500 to-purple-700 text-white font-display font-bold text-xl border-2 border-purple-300 cursor-pointer">
+          🔄 MAIN SEMULA DARI MISI 1
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SKRIP UTAMA PERMAINAN JAWIQUEST: MISI PASAR MINI JAWI
+       ===================================================================== -->
+  <script>
+    /**
+     * =========================================================================
+     * 1. BANK PERKATAAN & BARANGAN PASAR MINI (MUDAH DIEDIT OLEH GURU)
+     * =========================================================================
+     * Panduan Guru:
+     * - Setiap objek mewakili satu barang di Pasar Mini JawiQuest.
+     * - `id`: Pengecam unik barang (jangan ubah jika mahu kekalkan ilustrasi SVG).
+     * - `jawi`: Ejaan Jawi standard DBP (dipaparkan kepada murid).
+     * - `category`: Kategori pembelajaran ('e-pepet' | 'e-taling' | 'gugur-alif').
+     * - `shelf`: Kawasan rak ('buah_sayur' | 'makanan' | 'keperluan' | 'cabaran').
+     * - `price`: Harga barang dalam Ringgit Malaysia (RM).
+     * =========================================================================
+     */
+    const ITEM_BANK = [
+      // --- KATEGORI 1: VOKAL E-PEPET ---
+      { id: 'telur',   jawi: 'تلور',   category: 'e-pepet',    shelf: 'makanan',    price: 4.50 },
+      { id: 'beras',   jawi: 'برس',    category: 'e-pepet',    shelf: 'makanan',    price: 12.00 },
+      { id: 'betik',   jawi: 'بتيق',   category: 'e-pepet',    shelf: 'buah_sayur', price: 3.50 },
+      { id: 'keropok', jawi: 'كروڤوق', category: 'e-pepet',    shelf: 'makanan',    price: 2.50 },
+      { id: 'tepung',  jawi: 'تڤوڠ',   category: 'e-pepet',    shelf: 'makanan',    price: 3.00 },
+      { id: 'terung',  jawi: 'تروڠ',   category: 'e-pepet',    shelf: 'buah_sayur', price: 2.80 },
+      { id: 'kelapa',  jawi: 'كلاڤ',   category: 'e-pepet',    shelf: 'buah_sayur', price: 3.20 },
+      { id: 'berus',   jawi: 'بروس',   category: 'e-pepet',    shelf: 'keperluan',  price: 2.20 },
+
+      // --- KATEGORI 2: VOKAL E-TALING ---
+      { id: 'epal',    jawi: 'ايڤل',   category: 'e-taling',   shelf: 'buah_sayur', price: 2.00 },
+      { id: 'kek',     jawi: 'كيك',    category: 'e-taling',   shelf: 'makanan',    price: 6.50 },
+      { id: 'jem',     jawi: 'جيم',    category: 'e-taling',   shelf: 'makanan',    price: 4.80 },
+      { id: 'keju',    jawi: 'كيجو',   category: 'e-taling',   shelf: 'makanan',    price: 5.50 },
+      { id: 'teh',     jawi: 'تيه',    category: 'e-taling',   shelf: 'makanan',    price: 3.80 },
+      { id: 'oren',    jawi: 'اورين',  category: 'e-taling',   shelf: 'buah_sayur', price: 2.50 },
+      { id: 'beg',     jawi: 'بيڬ',    category: 'e-taling',   shelf: 'keperluan',  price: 8.00 },
+      { id: 'belon',   jawi: 'بيلون',  category: 'e-taling',   shelf: 'cabaran',    price: 1.50 },
+      { id: 'pen',     jawi: 'ڤين',    category: 'e-taling',   shelf: 'cabaran',    price: 1.80 },
+
+      // --- KATEGORI 3: HUKUM PENGGUGURAN ALIF SUKU KATA TERTUTUP KVK ---
+      { id: 'pisang',  jawi: 'ڤيسڠ',   category: 'gugur-alif', shelf: 'buah_sayur', price: 3.00 },
+      { id: 'nanas',   jawi: 'نانس',   category: 'gugur-alif', shelf: 'buah_sayur', price: 4.00 },
+      { id: 'lobak',   jawi: 'لوبق',   category: 'gugur-alif', shelf: 'buah_sayur', price: 2.40 },
+      { id: 'bawang',  jawi: 'باوڠ',   category: 'gugur-alif', shelf: 'buah_sayur', price: 2.60 },
+      { id: 'garam',   jawi: 'ڬارم',   category: 'gugur-alif', shelf: 'makanan',    price: 1.80 },
+      { id: 'cawan',   jawi: 'چاون',   category: 'gugur-alif', shelf: 'keperluan',  price: 3.50 },
+      { id: 'jam',     jawi: 'جم',     category: 'gugur-alif', shelf: 'cabaran',    price: 9.50 },
+      { id: 'gam',     jawi: 'ڬم',     category: 'gugur-alif', shelf: 'cabaran',    price: 1.50 },
+      { id: 'cat',     jawi: 'چت',     category: 'gugur-alif', shelf: 'cabaran',    price: 4.50 }
+    ];
+
+    /**
+     * Definisi 4 Kawasan Rak Pasar Mini
+     */
+    const SHELVES = [
+      {
+        id: 'buah_sayur',
+        title: 'Rak Buah-buahan dan Sayur-sayuran',
+        shortTitle: 'Buah & Sayur',
+        icon: '🍎',
+        subtitle: 'Buah-buahan segar dan sayur-sayuran berkhasiat'
+      },
+      {
+        id: 'makanan',
+        title: 'Rak Makanan',
+        shortTitle: 'Rak Makanan',
+        icon: '🍞',
+        subtitle: 'Bahan dapur dan makanan harian kegemaran ramai'
+      },
+      {
+        id: 'keperluan',
+        title: 'Rak Keperluan Harian',
+        shortTitle: 'Keperluan Harian',
+        icon: '🎒',
+        subtitle: 'Barangan kegunaan harian murid Tahun 2'
+      },
+      {
+        id: 'cabaran',
+        title: 'Rak Cabaran Jawi',
+        shortTitle: 'Cabaran Jawi',
+        icon: '⭐',
+        subtitle: 'Uji ketajaman membaca e-pepet, e-taling & gugur Alif!'
+      }
+    ];
+
+    /**
+     * Definisi 3 Misi Pembelajaran Progresif
+     */
+    const MISSIONS = [
+      {
+        number: 1,
+        title: 'MISI 1 – BELI-BELAH E-PEPET',
+        shortBadge: 'MISI 1: E-PEPET',
+        focusText: 'Fokus: Vokal e-pepet',
+        description: 'Cari 4 barang berdasarkan perkataan Jawi yang mengandungi vokal e-pepet.',
+        count: 4,
+        categories: ['e-pepet']
+      },
+      {
+        number: 2,
+        title: 'MISI 2 – BELI-BELAH E-TALING',
+        shortBadge: 'MISI 2: E-TALING',
+        focusText: 'Fokus: Vokal e-taling',
+        description: 'Cari 4 barang berdasarkan perkataan Jawi yang mengandungi vokal e-taling.',
+        count: 4,
+        categories: ['e-taling']
+      },
+      {
+        number: 3,
+        title: 'MISI 3 – MISI CAMPURAN JAWI',
+        shortBadge: 'MISI 3: CAMPURAN JAWI',
+        focusText: 'Fokus: e-pepet, e-taling & Gugur Alif KVK',
+        description: 'Cabaran kemuncak! Cari 5 barang campuran e-pepet, e-taling dan hukum pengguguran Alif KVK.',
+        count: 5,
+        categories: ['e-pepet', 'e-taling', 'gugur-alif']
+      }
+    ];
+
+    const MOTIVATIONAL_PRAISES = [
+      'Hebat!',
+      'Syabas!',
+      'Bagus Sekali!',
+      'Anda Juara Jawi!',
+      'Cemerlang!'
+    ];
+
+    /**
+     * =========================================================================
+     * 2. ILUSTRASI KARTUN SVG BERKUALITI UNTUK SETIAP 26 BARANG
+     * =========================================================================
+     */
+    function getItemSVG(id) {
+      const svgs = {
+        telur: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="14" y="48" width="72" height="32" rx="10" fill="#d97706" stroke="#78350f" stroke-width="3"/><ellipse cx="32" cy="44" rx="13" ry="18" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/><ellipse cx="50" cy="42" rx="13" ry="19" fill="#fde68a" stroke="#b45309" stroke-width="2.5"/><ellipse cx="68" cy="44" rx="13" ry="18" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/><path d="M14 56 Q32 66 50 56 Q68 66 86 56" fill="none" stroke="#92400e" stroke-width="3"/></svg>`,
+        beras: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M24 26 L76 26 L82 84 Q82 90 74 90 L26 90 Q18 90 18 84 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="3"/><rect x="24" y="20" width="52" height="10" rx="5" fill="#ef4444" stroke="#991b1b" stroke-width="2.5"/><circle cx="50" cy="58" r="18" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/><path d="M44 64 Q50 48 56 64" fill="none" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/></svg>`,
+        betik: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M52 16 C72 16 84 42 78 68 C73 86 56 92 44 88 C28 83 22 64 28 44 C33 26 42 16 52 16 Z" fill="#f97316" stroke="#9a3412" stroke-width="3"/><path d="M52 16 L54 9" stroke="#15803d" stroke-width="4" stroke-linecap="round"/><ellipse cx="46" cy="54" rx="10" ry="18" fill="#fdba74" opacity="0.55"/></svg>`,
+        keropok: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="16" width="56" height="68" rx="10" fill="#a855f7" stroke="#581c87" stroke-width="3"/><path d="M22 24 L78 24 M22 76 L78 76" stroke="#facc15" stroke-width="4"/><circle cx="50" cy="50" r="18" fill="#facc15" stroke="#b45309" stroke-width="2.5"/><circle cx="45" cy="47" r="4" fill="#fde047"/><circle cx="55" cy="52" r="5" fill="#f59e0b"/></svg>`,
+        tepung: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="22" width="52" height="66" rx="8" fill="#f8fafc" stroke="#475569" stroke-width="3"/><rect x="24" y="22" width="52" height="16" rx="6" fill="#38bdf8" stroke="#0369a1" stroke-width="2.5"/><circle cx="50" cy="60" r="14" fill="#e2e8f0"/><path d="M40 64 Q50 50 60 64" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/></svg>`,
+        terung: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M62 24 C74 34 76 64 60 80 C46 92 28 84 26 68 C24 54 42 36 52 24 Z" fill="#7e22ce" stroke="#3b0764" stroke-width="3"/><path d="M48 26 L56 14 L66 26 L58 30 Z" fill="#22c55e" stroke="#14532d" stroke-width="2.5"/><ellipse cx="44" cy="64" rx="6" ry="12" transform="rotate(25 44 64)" fill="#c084fc" opacity="0.5"/></svg>`,
+        kelapa: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="54" r="32" fill="#22c55e" stroke="#14532d" stroke-width="3"/><path d="M44 22 L50 13 L56 22 Z" fill="#15803d"/><circle cx="50" cy="58" r="18" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/><path d="M54 48 L68 20" stroke="#facc15" stroke-width="5" stroke-linecap="round"/></svg>`,
+        berus: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="16" y="54" width="68" height="14" rx="7" fill="#38bdf8" stroke="#0369a1" stroke-width="3"/><rect x="52" y="34" width="28" height="20" rx="4" fill="#fef08a" stroke="#ca8a04" stroke-width="2.5"/><line x1="59" y1="34" x2="59" y2="54" stroke="#ca8a04" stroke-width="2"/><line x1="66" y1="34" x2="66" y2="54" stroke="#ca8a04" stroke-width="2"/><line x1="73" y1="34" x2="73" y2="54" stroke="#ca8a04" stroke-width="2"/></svg>`,
+        epal: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M50 32 C34 24 20 38 24 60 C27 78 40 88 50 84 C60 88 73 78 76 60 C80 38 66 24 50 32 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3"/><path d="M50 32 L52 18" stroke="#78350f" stroke-width="4" stroke-linecap="round"/><ellipse cx="61" cy="22" rx="9" ry="5" transform="rotate(-20 61 22)" fill="#22c55e" stroke="#14532d" stroke-width="2"/><ellipse cx="36" cy="48" rx="5" ry="10" fill="#fca5a5" opacity="0.65"/></svg>`,
+        kek: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="20" y="46" width="60" height="36" rx="8" fill="#f472b6" stroke="#9d174d" stroke-width="3"/><path d="M20 52 Q30 62 40 52 Q50 62 60 52 Q70 62 80 52 L80 46 L20 46 Z" fill="#ffffff"/><rect x="47" y="26" width="6" height="20" fill="#38bdf8"/><path d="M50 15 Q55 21 50 26 Q45 21 50 15 Z" fill="#facc15" stroke="#ea580c" stroke-width="1.5"/></svg>`,
+        jem: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="28" y="34" width="44" height="52" rx="12" fill="#e11d48" stroke="#881337" stroke-width="3"/><rect x="25" y="22" width="50" height="13" rx="5" fill="#facc15" stroke="#a16207" stroke-width="2.5"/><rect x="34" y="48" width="32" height="22" rx="5" fill="#fff1f2"/><circle cx="50" cy="59" r="6" fill="#f43f5e"/></svg>`,
+        keju: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M18 68 L82 68 L82 42 L18 54 Z" fill="#f59e0b" stroke="#92400e" stroke-width="3" stroke-linejoin="round"/><path d="M18 54 L62 28 L82 42 Z" fill="#fde047" stroke="#92400e" stroke-width="3" stroke-linejoin="round"/><circle cx="38" cy="60" r="4.5" fill="#b45309"/><circle cx="62" cy="57" r="5.5" fill="#b45309"/><circle cx="56" cy="40" r="3.5" fill="#eab308"/></svg>`,
+        teh: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="26" y="24" width="48" height="62" rx="8" fill="#16a34a" stroke="#14532d" stroke-width="3"/><rect x="32" y="38" width="36" height="32" rx="6" fill="#fef9c3"/><path d="M42 60 Q50 42 58 60 Q50 64 42 60 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/></svg>`,
+        oren: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="54" r="31" fill="#fb923c" stroke="#c2410c" stroke-width="3"/><circle cx="50" cy="24" r="4" fill="#15803d"/><ellipse cx="60" cy="22" rx="9" ry="4.5" transform="rotate(-18 60 22)" fill="#22c55e" stroke="#14532d" stroke-width="2"/><circle cx="38" cy="46" r="2" fill="#9a3412"/><circle cx="44" cy="62" r="2" fill="#9a3412"/><circle cx="62" cy="52" r="2" fill="#9a3412"/></svg>`,
+        beg: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M38 28 Q38 14 50 14 Q62 14 62 28" fill="none" stroke="#4c1d95" stroke-width="5" stroke-linecap="round"/><rect x="24" y="28" width="52" height="58" rx="16" fill="#7c3aed" stroke="#4c1d95" stroke-width="3"/><rect x="32" y="52" width="36" height="24" rx="8" fill="#facc15" stroke="#a16207" stroke-width="2.5"/><line x1="24" y1="44" x2="76" y2="44" stroke="#4c1d95" stroke-width="3"/></svg>`,
+        belon: `<svg viewBox="0 0 100 100" class="w-full h-full"><ellipse cx="50" cy="42" rx="24" ry="29" fill="#38bdf8" stroke="#0369a1" stroke-width="3"/><polygon points="50,71 44,78 56,78" fill="#0284c7"/><path d="M50 78 Q44 86 52 93" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="41" cy="33" rx="5" ry="9" transform="rotate(-20 41 33)" fill="#bae6fd" opacity="0.75"/></svg>`,
+        pen: `<svg viewBox="0 0 100 100" class="w-full h-full"><g transform="rotate(-35 50 50)"><rect x="42" y="18" width="16" height="54" rx="4" fill="#2563eb" stroke="#1e3a8a" stroke-width="3"/><polygon points="42,72 58,72 50,88" fill="#fde68a" stroke="#1e3a8a" stroke-width="2.5"/><polygon points="48,82 52,82 50,88" fill="#1e1b4b"/><rect x="42" y="28" width="16" height="6" fill="#facc15"/></g></svg>`,
+        pisang: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M26 70 C44 82 74 68 78 30 C79 24 73 22 70 27 C63 52 44 62 24 58 C19 57 20 66 26 70 Z" fill="#facc15" stroke="#a16207" stroke-width="3"/><path d="M32 76 C52 86 80 72 82 36" fill="none" stroke="#eab308" stroke-width="7" stroke-linecap="round"/><rect x="70" y="21" width="7" height="7" rx="2" fill="#78350f"/></svg>`,
+        nanas: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M38 34 L32 14 L46 28 L50 10 L54 28 L68 14 L62 34 Z" fill="#22c55e" stroke="#14532d" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="50" cy="61" rx="23" ry="27" fill="#f59e0b" stroke="#92400e" stroke-width="3"/><path d="M34 50 L66 72 M66 50 L34 72 M32 62 L62 80 M38 42 L68 60" stroke="#b45309" stroke-width="2"/></svg>`,
+        lobak: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M44 26 L36 12 M50 26 L50 10 M56 26 L64 12" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/><path d="M35 28 L65 28 L52 88 Q50 92 48 88 Z" fill="#fb923c" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/><line x1="40" y1="42" x2="52" y2="42" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="58" x2="57" y2="58" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+        bawang: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M50 22 C68 34 78 52 74 70 C70 84 30 84 26 70 C22 52 32 34 50 22 Z" fill="#c084fc" stroke="#6b21a8" stroke-width="3"/><path d="M50 22 L50 13" stroke="#7e22ce" stroke-width="4" stroke-linecap="round"/><path d="M50 24 Q38 52 40 78 M50 24 Q62 52 60 78" fill="none" stroke="#9333ea" stroke-width="2"/></svg>`,
+        garam: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="30" y="34" width="40" height="52" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/><path d="M32 34 Q50 16 68 34 Z" fill="#94a3b8" stroke="#334155" stroke-width="2.5"/><rect x="36" y="50" width="28" height="22" rx="5" fill="#ffffff"/><text x="50" y="65" text-anchor="middle" font-size="11" font-weight="bold" fill="#0369a1">GARAM</text></svg>`,
+        cawan: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M68 42 Q84 42 84 56 Q84 70 68 70" fill="none" stroke="#0284c7" stroke-width="6" stroke-linecap="round"/><path d="M26 34 L70 34 L65 76 Q64 84 54 84 L42 84 Q32 84 31 76 Z" fill="#38bdf8" stroke="#0369a1" stroke-width="3"/><ellipse cx="48" cy="34" rx="22" ry="5" fill="#bae6fd" stroke="#0369a1" stroke-width="2.5"/></svg>`,
+        jam: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="30" cy="26" r="10" fill="#facc15" stroke="#a16207" stroke-width="3"/><circle cx="70" cy="26" r="10" fill="#facc15" stroke="#a16207" stroke-width="3"/><circle cx="50" cy="54" r="30" fill="#ffffff" stroke="#7c3aed" stroke-width="5"/><line x1="50" y1="54" x2="50" y2="36" stroke="#1e1b4b" stroke-width="3.5" stroke-linecap="round"/><line x1="50" y1="54" x2="64" y2="54" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/><circle cx="50" cy="54" r="3.5" fill="#7c3aed"/></svg>`,
+        gam: `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="43,28 57,28 50,14" fill="#f97316" stroke="#9a3412" stroke-width="2.5"/><rect x="32" y="28" width="36" height="58" rx="8" fill="#facc15" stroke="#a16207" stroke-width="3"/><rect x="37" y="44" width="26" height="26" rx="4" fill="#ffffff"/><circle cx="50" cy="57" r="7" fill="#a855f7"/></svg>`,
+        cat: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M26 36 Q50 14 74 36" fill="none" stroke="#475569" stroke-width="3"/><rect x="24" y="34" width="52" height="52" rx="8" fill="#cbd5e1" stroke="#334155" stroke-width="3"/><path d="M24 34 L76 34 L76 48 Q64 56 54 46 Q42 56 24 46 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/></svg>`
+      };
+      return svgs[id] || `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#c084fc"/></svg>`;
+    }
+
+    /**
+     * =========================================================================
+     * 3. ENJIN KESAN BUNYI WEB AUDIO API (12 SOUND EFFECTS TANPA FAIL LUARAN)
+     * =========================================================================
+     */
+    class SoundEngine {
+      constructor() {
+        this.enabled = true;
+        this.ctx = null;
+      }
+
+      initContext() {
+        if (!this.enabled) return null;
+        try {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+          }
+          return this.ctx;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      tone(freq, type = 'sine', duration = 0.15, delay = 0, volume = 0.18, endFreq = null) {
+        const ctx = this.initContext();
+        if (!ctx) return;
+        try {
+          const now = ctx.currentTime + delay;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+          if (endFreq) {
+            osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+          }
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(volume, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration + 0.02);
+        } catch (e) {
+          // Abaikan jika pelayar menyekat audio
+        }
+      }
+
+      // 1. Permainan bermula – bunyi pembukaan ceria
+      playStart() {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          this.tone(f, 'triangle', 0.22, i * 0.09, 0.2);
+        });
+      }
+
+      // 2. Pintu pasar terbuka – bunyi loceng kedai + geseran pintu
+      playDoorOpen() {
+        this.tone(987.77, 'sine', 0.35, 0.05, 0.22); // Ding
+        this.tone(783.99, 'sine', 0.45, 0.25, 0.22); // Dong
+        this.tone(240, 'triangle', 0.65, 0.15, 0.08, 420); // Pintu meluncur
+      }
+
+      // 3. Menekan butang – bunyi klik lembut
+      playClick() {
+        this.tone(620, 'sine', 0.07, 0, 0.14, 480);
+      }
+
+      // 4. Memilih barang – bunyi pop
+      playPop() {
+        this.tone(360, 'sine', 0.1, 0, 0.2, 680);
+      }
+
+      // 5. Barang masuk troli – bunyi ding & swoosh
+      playCartIn() {
+        this.tone(420, 'triangle', 0.16, 0.05, 0.12, 880);
+        this.tone(1174.66, 'sine', 0.28, 0.18, 0.2);
+      }
+
+      // 6. Memilih barang salah – bunyi lembut yang tidak mengecewakan
+      playWrong() {
+        this.tone(310, 'triangle', 0.18, 0, 0.15, 250);
+        this.tone(250, 'triangle', 0.22, 0.16, 0.14, 210);
+      }
+
+      // 7. Melengkapkan senarai belian – bunyi kejayaan
+      playListComplete() {
+        [587.33, 739.99, 880, 1174.66].forEach((f, i) => {
+          this.tone(f, 'triangle', 0.25, i * 0.08, 0.2);
+        });
+      }
+
+      // 8. Menukar kawasan rak – bunyi peralihan
+      playSwitchShelf() {
+        this.tone(300, 'sine', 0.15, 0, 0.1, 520);
+      }
+
+      // 9. Mengimbas barang – bunyi beep pengimbas
+      playScan() {
+        this.tone(2250, 'square', 0.11, 0, 0.11);
+      }
+
+      // 10. Membuat pembayaran – bunyi mesin juruwang (cha-ching!)
+      playCashRegister() {
+        this.tone(180, 'sawtooth', 0.1, 0, 0.1, 320);
+        this.tone(1318.5, 'sine', 0.45, 0.11, 0.24);
+        this.tone(1975.5, 'sine', 0.5, 0.16, 0.2);
+      }
+
+      // 11. Memperoleh syiling – bunyi syiling
+      playCoin() {
+        this.tone(987.77, 'sine', 0.1, 0, 0.18);
+        this.tone(1318.51, 'sine', 0.25, 0.09, 0.2);
+      }
+
+      // 12. Menamatkan misi – bunyi kemenangan ceria
+      playVictory() {
+        const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
+        const times = [0, 0.11, 0.22, 0.34, 0.5, 0.64];
+        notes.forEach((n, idx) => {
+          this.tone(n, 'triangle', 0.28, times[idx], 0.22);
+        });
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    /**
+     * =========================================================================
+     * 4. KEADAAN PERMAINAN (GAME STATE)
+     * =========================================================================
+     */
+    const state = {
+      playerName: 'Aisyah',
+      currentMissionIdx: 0, // 0 = Misi 1, 1 = Misi 2, 2 = Misi 3
+      currentShelfIdx: 0,   // 0..3
+      shoppingList: [],     // Senarai sasaran semasa (array of item objects)
+      cart: [],             // Barang dalam troli semasa (array of item objects)
+      rewardedIds: new Set(), // Mengelakkan barang dikira dua kali untuk syiling
+      totalCoins: 0,
+      wrongPicks: 0,
+      isListCollapsed: false,
+      isScanning: false,
+      usedItemIdsAcrossMissions: new Set()
+    };
+
+    /**
+     * =========================================================================
+     * 5. FUNGSI UTILITI & KAWALAN BUNYI / TOAST
+     * =========================================================================
+     */
+    function toggleSound() {
+      sound.enabled = !sound.enabled;
+      if (sound.enabled) {
+        sound.playClick();
+      }
+      document.querySelectorAll('.sound-icon').forEach(el => {
+        el.textContent = sound.enabled ? '🔊' : '🔇';
+      });
+      document.querySelectorAll('.sound-label').forEach(el => {
+        el.textContent = sound.enabled ? 'Bunyi: ON' : 'Bunyi: OFF';
+      });
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      const styles = {
+        success: 'bg-green-500 border-green-200 text-white',
+        warning: 'bg-amber-400 border-yellow-100 text-amber-950',
+        info: 'bg-purple-600 border-purple-200 text-white'
+      };
+
+      toast.className = `px-4 py-2.5 rounded-2xl border-2 shadow-xl font-display font-bold text-sm sm:text-base text-center animate-pop-in ${styles[type] || styles.info}`;
+      toast.textContent = message;
+
+      container.innerHTML = '';
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 320);
+      }, 2300);
+    }
+
+    function showScreen(screenId) {
+      ['screen-start', 'screen-market', 'screen-counter', 'screen-receipt'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * =========================================================================
+     * 6. HALAMAN PERMULAAN & ANIMASI PINTU PASAR MINI
+     * =========================================================================
+     */
+    function selectQuickName(name) {
+      sound.playClick();
+      document.getElementById('player-name-input').value = name;
+    }
+
+    function openHowToPlay() {
+      sound.playClick();
+      document.getElementById('modal-howto').classList.remove('hidden');
+    }
+
+    function closeHowToPlay() {
+      sound.playClick();
+      document.getElementById('modal-howto').classList.add('hidden');
+    }
+
+    function startGameWithDoorAnimation() {
+      const inputVal = document.getElementById('player-name-input').value.trim();
+      state.playerName = inputVal || 'Adik Bijak';
+      state.currentMissionIdx = 0;
+      state.totalCoins = 0;
+      state.usedItemIdsAcrossMissions.clear();
+
+      const startBtn = document.getElementById('btn-start-game');
+      startBtn.disabled = true;
+
+      sound.playStart();
+      setTimeout(() => sound.playDoorOpen(), 250);
+
+      // Animasi pintu kaca pasar mini terbuka
+      const doorFrame = document.getElementById('entrance-door-frame');
+      const card = document.getElementById('storefront-card');
+      doorFrame.classList.add('doors-open');
+      card.classList.add('doors-open');
+
+      setTimeout(() => {
+        startBtn.disabled = false;
+        doorFrame.classList.remove('doors-open');
+        card.classList.remove('doors-open');
+        setupMission(0);
+      }, 1250);
+    }
+
+    /**
+     * =========================================================================
+     * 7. PENJANAAN MISI & SENARAI BELIAN JAWI
+     * =========================================================================
+     */
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function setupMission(missionIndex) {
+      state.currentMissionIdx = missionIndex;
+      state.currentShelfIdx = 0;
+      state.cart = [];
+      state.rewardedIds.clear();
+      state.wrongPicks = 0;
+      state.isScanning = false;
+
+      const mission = MISSIONS[missionIndex];
+
+      // Pilih barang sasaran mengikut kategori misi dan elakkan pengulangan daripada misi sebelumnya
+      let selected = [];
+      if (mission.categories.length === 1) {
+        const pool = shuffleArray(ITEM_BANK.filter(item => item.category === mission.categories[0]));
+        selected = pool.slice(0, mission.count);
+      } else {
+        // Misi 3: Campuran seimbang daripada semua 3 kategori pembelajaran
+        const ePepetPool = shuffleArray(ITEM_BANK.filter(i => i.category === 'e-pepet' && !state.usedItemIdsAcrossMissions.has(i.id)));
+        const eTalingPool = shuffleArray(ITEM_BANK.filter(i => i.category === 'e-taling' && !state.usedItemIdsAcrossMissions.has(i.id)));
+        const gugurAlifPool = shuffleArray(ITEM_BANK.filter(i => i.category === 'gugur-alif'));
+
+        selected = [
+          ePepetPool[0],
+          eTalingPool[0],
+          gugurAlifPool[0],
+          gugurAlifPool[1],
+          (ePepetPool[1] || gugurAlifPool[2])
+        ].filter(Boolean);
+      }
+
+      selected.forEach(item => state.usedItemIdsAcrossMissions.add(item.id));
+      state.shoppingList = selected;
+
+      showScreen('screen-market');
+      renderHUD();
+      renderShoppingList();
+      renderShelf();
+      openMissionIntroModal();
+    }
+
+    function openMissionIntroModal() {
+      const mission = MISSIONS[state.currentMissionIdx];
+      document.getElementById('intro-mission-title').textContent = mission.title;
+      document.getElementById('intro-mission-desc').textContent = mission.description;
+
+      const wordsEl = document.getElementById('intro-mission-words');
+      wordsEl.innerHTML = state.shoppingList.map(item => `
+        <span class="jawi-text text-2xl sm:text-3xl font-bold text-purple-950 bg-white px-4 py-1.5 rounded-2xl border-2 border-purple-300 shadow-xs">
+          ${item.jawi}
+        </span>
+      `).join('');
+
+      document.getElementById('modal-mission-intro').classList.remove('hidden');
+    }
+
+    function closeMissionIntro() {
+      sound.playClick();
+      document.getElementById('modal-mission-intro').classList.add('hidden');
+    }
+
+    /**
+     * =========================================================================
+     * 8. PAPARAN HUD, SENARAI BELIAN & RAK PASAR MINI
+     * =========================================================================
+     */
+    function renderHUD() {
+      const mission = MISSIONS[state.currentMissionIdx];
+      document.getElementById('hud-player-name').textContent = state.playerName;
+      document.getElementById('hud-mission-badge').textContent = mission.shortBadge;
+      document.getElementById('hud-coins').textContent = state.totalCoins;
+      document.getElementById('hud-cart-count').textContent = state.cart.length;
+
+      const collectedTargetsCount = state.shoppingList.filter(target =>
+        state.cart.some(c => c.id === target.id)
+      ).length;
+
+      document.getElementById('hud-list-progress').textContent = `${collectedTargetsCount}/${state.shoppingList.length}`;
+      document.getElementById('mission-focus-label').textContent = mission.focusText;
+
+      // Kemas kini butang Pergi ke Kaunter
+      const checkoutBtn = document.getElementById('btn-go-checkout');
+      const allFound = collectedTargetsCount === state.shoppingList.length;
+      if (allFound) {
+        checkoutBtn.classList.add('ready-checkout-pulse');
+      } else {
+        checkoutBtn.classList.remove('ready-checkout-pulse');
+      }
+    }
+
+    function renderShoppingList() {
+      const listEl = document.getElementById('shopping-list-items');
+      listEl.innerHTML = state.shoppingList.map(target => {
+        const isCollected = state.cart.some(c => c.id === target.id);
+        return `
+          <li class="flex items-center justify-between px-4 py-2.5 rounded-2xl border-2 transition-all ${
+            isCollected
+              ? 'bg-emerald-100 border-emerald-400 text-emerald-950 shadow-xs'
+              : 'bg-white border-amber-300 text-purple-950 shadow-xs'
+          }">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full font-display font-bold text-lg ${
+              isCollected ? 'bg-green-500 text-white' : 'bg-amber-100 text-amber-400 border border-amber-300'
+            }">
+              ${isCollected ? '✓' : '•'}
+            </span>
+
+            <span class="jawi-text text-2xl sm:text-3xl font-bold ${isCollected ? 'line-through opacity-75' : ''}">
+              ${target.jawi}
+            </span>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function toggleShoppingListBody() {
+      sound.playClick();
+      state.isListCollapsed = !state.isListCollapsed;
+      const body = document.getElementById('shopping-list-body');
+      const btn = document.getElementById('btn-collapse-list');
+      if (state.isListCollapsed) {
+        body.classList.add('hidden');
+        btn.textContent = 'Buka ▼';
+      } else {
+        body.classList.remove('hidden');
+        btn.textContent = 'Tutup ▲';
+      }
+    }
+
+    function toggleShoppingListPanel() {
+      sound.playClick();
+      const panel = document.getElementById('shopping-list-panel');
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+      } else if (state.isListCollapsed) {
+        toggleShoppingListBody();
+      } else {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        panel.classList.add('ring-4', 'ring-yellow-400');
+        setTimeout(() => panel.classList.remove('ring-4', 'ring-yellow-400'), 700);
+      }
+    }
+
+    function switchShelf(index) {
+      if (index < 0) index = SHELVES.length - 1;
+      if (index >= SHELVES.length) index = 0;
+      state.currentShelfIdx = index;
+      sound.playSwitchShelf();
+      renderShelf();
+    }
+
+    function nextShelf() {
+      switchShelf(state.currentShelfIdx + 1);
+    }
+
+    function prevShelf() {
+      switchShelf(state.currentShelfIdx - 1);
+    }
+
+    function renderShelf() {
+      const shelf = SHELVES[state.currentShelfIdx];
+
+      // Kemas kini gaya tab aktif
+      document.querySelectorAll('.shelf-tab').forEach(btn => {
+        const idx = Number(btn.getAttribute('data-shelf-tab'));
+        if (idx === state.currentShelfIdx) {
+          btn.className = 'shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2 bg-yellow-300 text-purple-950 border-amber-400';
+        } else {
+          btn.className = 'shelf-tab btn-3d py-2.5 px-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-center cursor-pointer border-2 bg-white text-purple-800 border-purple-200 hover:bg-purple-50';
+        }
+      });
+
+      document.getElementById('current-shelf-icon').textContent = shelf.icon;
+      document.getElementById('current-shelf-title').textContent = shelf.title;
+      document.getElementById('current-shelf-subtitle').textContent = shelf.subtitle;
+      document.getElementById('shelf-page-indicator').textContent = `Rak ${state.currentShelfIdx + 1} / ${SHELVES.length}`;
+
+      const itemsOnShelf = ITEM_BANK.filter(item => item.shelf === shelf.id);
+      const gridEl = document.getElementById('shelf-items-grid');
+
+      gridEl.innerHTML = itemsOnShelf.map(item => {
+        const inCart = state.cart.some(c => c.id === item.id);
+        const isTarget = state.shoppingList.some(t => t.id === item.id);
+        const isCollectedTarget = inCart && isTarget;
+
+        return `
+          <button
+            type="button"
+            onclick="handleSelectItem('${item.id}', this)"
+            class="product-card relative bg-white rounded-2xl p-3 sm:p-4 border-3 ${
+              isCollectedTarget
+                ? 'border-green-500 bg-emerald-50/90'
+                : inCart
+                  ? 'border-amber-400 bg-amber-50/70'
+                  : 'border-purple-200 hover:border-purple-500'
+            } shadow-md flex flex-col items-center justify-between cursor-pointer text-center group"
+          >
+            <!-- Tag Harga RM -->
+            <span class="self-start px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 font-display font-bold text-xs border border-sky-300">
+              RM ${item.price.toFixed(2)}
+            </span>
+
+            <!-- Lencana Status Jika Sudah Dalam Troli -->
+            ${isCollectedTarget ? `
+              <span class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-green-500 text-white font-bold text-sm flex items-center justify-center shadow">✓</span>
+            ` : inCart ? `
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 font-extrabold text-[10px] shadow">Dalam Troli</span>
+            ` : ''}
+
+            <!-- Ilustrasi Kartun Barang -->
+            <div class="w-20 h-20 sm:w-24 sm:h-24 my-2 transition-transform group-hover:scale-105">
+              ${getItemSVG(item.id)}
+            </div>
+
+            <!-- Label Ejaan Jawi Sahaja (Tiada Rumi Automatik) -->
+            <div class="w-full py-1.5 px-2 rounded-xl bg-purple-100/90 border-2 border-purple-200 group-hover:bg-yellow-200 group-hover:border-amber-300 transition-colors">
+              <span class="jawi-text text-2xl sm:text-3xl font-bold text-purple-950 block">
+                ${item.jawi}
+              </span>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    /**
+     * =========================================================================
+     * 9. INTERAKSI MEMILIH BARANG, ANIMASI KE TROLI & PENGURUSAN TROLI
+     * =========================================================================
+     */
+    function animateItemToTrolley(itemId, sourceEl) {
+      const trolleyBtn = document.getElementById('btn-view-trolley');
+      const flyingLayer = document.getElementById('flying-layer');
+      if (!sourceEl || !trolleyBtn || !flyingLayer) return;
+
+      const startRect = sourceEl.getBoundingClientRect();
+      const endRect = trolleyBtn.getBoundingClientRect();
+
+      const flyer = document.createElement('div');
+      flyer.className = 'fixed w-16 h-16 p-1 bg-white rounded-2xl shadow-xl border-2 border-yellow-400 flex items-center justify-center';
+      flyer.style.left = `${startRect.left + startRect.width / 2 - 32}px`;
+      flyer.style.top = `${startRect.top + startRect.height / 2 - 32}px`;
+      flyer.style.transition = 'all 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
+      flyer.innerHTML = getItemSVG(itemId);
+
+      flyingLayer.appendChild(flyer);
+
+      requestAnimationFrame(() => {
+        flyer.style.left = `${endRect.left + endRect.width / 2 - 16}px`;
+        flyer.style.top = `${endRect.top + endRect.height / 2 - 16}px`;
+        flyer.style.transform = 'scale(0.35) rotate(20deg)';
+        flyer.style.opacity = '0.2';
+      });
+
+      setTimeout(() => {
+        flyer.remove();
+        trolleyBtn.classList.add('scale-110');
+        setTimeout(() => trolleyBtn.classList.remove('scale-110'), 180);
+      }, 560);
+    }
+
+    function handleSelectItem(itemId, cardElement) {
+      const item = ITEM_BANK.find(i => i.id === itemId);
+      if (!item) return;
+
+      sound.playPop();
+
+      // Jika barang sudah ada dalam troli, maklumkan secara mesra tanpa menduplikasi
+      if (state.cart.some(c => c.id === item.id)) {
+        showToast('Barang ini sudah ada dalam troli kamu! 🛒', 'info');
+        return;
+      }
+
+      // Masukkan ke dalam troli dengan animasi
+      state.cart.push(item);
+      animateItemToTrolley(item.id, cardElement);
+      setTimeout(() => sound.playCartIn(), 180);
+
+      const isTarget = state.shoppingList.some(t => t.id === item.id);
+
+      if (isTarget) {
+        // Berikan ganjaran 10 syiling sekali sahaja bagi setiap barang betul dalam misi ini
+        if (!state.rewardedIds.has(item.id)) {
+          state.rewardedIds.add(item.id);
+          state.totalCoins += 10;
+          setTimeout(() => sound.playCoin(), 320);
+        }
+
+        const praise = MOTIVATIONAL_PRAISES[Math.floor(Math.random() * MOTIVATIONAL_PRAISES.length)];
+        const allTargetsCollected = state.shoppingList.every(t => state.cart.some(c => c.id === t.id));
+
+        if (allTargetsCollected) {
+          setTimeout(() => sound.playListComplete(), 450);
+          showToast(`${praise} Semua barang dalam senarai telah lengkap! ✓`, 'success');
+        } else {
+          showToast(`${praise} Barang betul (+10 syiling) ✓`, 'success');
+        }
+      } else {
+        // Barang tiada dalam senarai belian
+        state.wrongPicks += 1;
+        setTimeout(() => sound.playWrong(), 240);
+        showToast('Ops! Barang ini tiada dalam senarai. Cuba cari barang lain!', 'warning');
+      }
+
+      renderHUD();
+      renderShoppingList();
+      renderShelf();
+    }
+
+    function openTrolleyModal(showWarningBanner = false) {
+      sound.playClick();
+      const banner = document.getElementById('trolley-alert-banner');
+      if (showWarningBanner) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+      renderTrolleyModalContents();
+      document.getElementById('modal-trolley').classList.remove('hidden');
+    }
+
+    function closeTrolleyModal() {
+      sound.playClick();
+      document.getElementById('modal-trolley').classList.add('hidden');
+    }
+
+    function renderTrolleyModalContents() {
+      document.getElementById('modal-trolley-count').textContent = state.cart.length;
+      const container = document.getElementById('trolley-items-container');
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-500 font-bold">
+            <div class="text-4xl mb-2">🛒</div>
+            Troli masih kosong. Pilih barang di rak pasar mini!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = state.cart.map(item => {
+        const isTarget = state.shoppingList.some(t => t.id === item.id);
+        return `
+          <div class="flex items-center justify-between gap-3 p-3 rounded-2xl border-2 ${
+            isTarget ? 'bg-emerald-50 border-emerald-300' : 'bg-rose-50 border-rose-300'
+          }">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-white rounded-xl p-1 border border-slate-200 shrink-0">
+                ${getItemSVG(item.id)}
+              </div>
+              <div>
+                <span class="jawi-text text-2xl font-bold text-purple-950 block leading-none">${item.jawi}</span>
+                <span class="text-xs font-extrabold ${isTarget ? 'text-emerald-700' : 'text-rose-700'}">
+                  ${isTarget ? '✓ Ada dalam senarai' : '✕ Tiada dalam senarai'} • RM ${item.price.toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            <button type="button" onclick="removeItemFromTrolley('${item.id}')"
+              class="btn-3d px-3 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-display font-bold text-xs sm:text-sm cursor-pointer shrink-0">
+              🗑️ BUANG BARANG
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function removeItemFromTrolley(itemId) {
+      sound.playClick();
+      state.cart = state.cart.filter(c => c.id !== itemId);
+      renderHUD();
+      renderShoppingList();
+      renderShelf();
+      renderTrolleyModalContents();
+      showToast('Barang telah dikeluarkan dari troli.', 'info');
+    }
+
+    /**
+     * =========================================================================
+     * 10. SISTEM KAUNTER PEMBAYARAN & PENGIMBAS KOD BAR
+     * =========================================================================
+     */
+    function goToCheckout() {
+      sound.playClick();
+
+      const allTargetsCollected = state.shoppingList.every(t => state.cart.some(c => c.id === t.id));
+      if (!allTargetsCollected) {
+        const remaining = state.shoppingList.length - state.shoppingList.filter(t => state.cart.some(c => c.id === t.id)).length;
+        sound.playWrong();
+        showToast(`Masih ada ${remaining} barang dalam senarai belum dijumpai!`, 'warning');
+        return;
+      }
+
+      // Pastikan murid mengeluarkan barang ekstra yang tiada dalam senarai sebelum membayar
+      const hasWrongItems = state.cart.some(c => !state.shoppingList.some(t => t.id === c.id));
+      if (hasWrongItems) {
+        sound.playWrong();
+        openTrolleyModal(true);
+        return;
+      }
+
+      // Papar halaman kaunter pembayaran
+      showScreen('screen-counter');
+      renderCheckoutCounter();
+    }
+
+    function backToMarketFromCounter() {
+      if (state.isScanning) return;
+      sound.playClick();
+      showScreen('screen-market');
+    }
+
+    function renderCheckoutCounter() {
+      const listEl = document.getElementById('counter-items-list');
+      const totalItems = state.cart.length;
+      const grandTotal = state.cart.reduce((sum, item) => sum + item.price, 0);
+
+      document.getElementById('counter-total-items').textContent = `${totalItems} Barang`;
+      document.getElementById('counter-grand-total').textContent = `RM ${grandTotal.toFixed(2)}`;
+      document.getElementById('register-live-total').textContent = 'RM 0.00';
+
+      document.getElementById('scanner-laser-beam').classList.add('hidden');
+      document.getElementById('scanner-active-item').innerHTML = `
+        <span class="text-3xl">📦</span>
+        <span class="text-xs font-bold text-slate-500 mt-1">Tekan "BAYAR SEKARANG" untuk mengimbas</span>
+      `;
+
+      const payBtn = document.getElementById('btn-pay-now');
+      payBtn.disabled = false;
+
+      listEl.innerHTML = state.cart.map((item, index) => `
+        <div id="checkout-row-${index}" class="py-2.5 px-2 flex items-center justify-between transition-colors rounded-xl">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-xl p-1 border border-amber-200">
+              ${getItemSVG(item.id)}
+            </div>
+            <span class="jawi-text text-2xl font-bold text-purple-950">${item.jawi}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="checkout-scan-badge-${index}" class="hidden px-2 py-0.5 rounded-full bg-green-500 text-white text-xs font-bold">✓ Diimbas</span>
+            <span class="font-display font-bold text-base text-slate-800">RM ${item.price.toFixed(2)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function processCheckoutPayment() {
+      if (state.isScanning) return;
+      state.isScanning = true;
+
+      const payBtn = document.getElementById('btn-pay-now');
+      const backBtn = document.getElementById('btn-back-market');
+      payBtn.disabled = true;
+      backBtn.disabled = true;
+
+      const laserEl = document.getElementById('scanner-laser-beam');
+      const activeStage = document.getElementById('scanner-active-item');
+      const liveTotalEl = document.getElementById('register-live-total');
+
+      laserEl.classList.remove('hidden');
+
+      let runningTotal = 0;
+      let idx = 0;
+
+      function scanNext() {
+        if (idx >= state.cart.length) {
+          laserEl.classList.add('hidden');
+          activeStage.innerHTML = `
+            <span class="text-3xl">✅</span>
+            <span class="text-sm font-display font-bold text-green-700 mt-1">Pembayaran Berjaya!</span>
+          `;
+          sound.playCashRegister();
+
+          setTimeout(() => {
+            state.isScanning = false;
+            backBtn.disabled = false;
+            completeMissionAndShowReceipt();
+          }, 950);
+          return;
+        }
+
+        const item = state.cart[idx];
+        runningTotal += item.price;
+
+        sound.playScan();
+        liveTotalEl.textContent = `RM ${runningTotal.toFixed(2)}`;
+
+        activeStage.innerHTML = `
+          <div class="w-14 h-14 animate-pop-in">${getItemSVG(item.id)}</div>
+          <span class="jawi-text text-xl font-bold text-purple-950 leading-none">${item.jawi} • RM ${item.price.toFixed(2)}</span>
+        `;
+
+        const row = document.getElementById(`checkout-row-${idx}`);
+        const badge = document.getElementById(`checkout-scan-badge-${idx}`);
+        if (row) row.classList.add('bg-emerald-100');
+        if (badge) badge.classList.remove('hidden');
+
+        idx += 1;
+        setTimeout(scanNext, 650);
+      }
+
+      scanNext();
+    }
+
+    /**
+     * =========================================================================
+     * 11. RESIT DIGITAL, BINTANG, SYILING BONUS & LENCANA JUARA
+     * =========================================================================
+     */
+    function completeMissionAndShowReceipt() {
+      const mission = MISSIONS[state.currentMissionIdx];
+      const correctCount = state.shoppingList.length;
+      const itemCoins = correctCount * 10;
+      const bonusCoins = 20; // Bonus lengkap semua barang
+      const missionCoinsEarned = itemCoins + bonusCoins;
+
+      state.totalCoins += bonusCoins;
+
+      // Kira bilangan bintang (1 hingga 3 bintang berdasarkan ketepatan)
+      let starCount = 3;
+      if (state.wrongPicks >= 4) starCount = 1;
+      else if (state.wrongPicks >= 2) starCount = 2;
+
+      const totalPrice = state.cart.reduce((sum, i) => sum + i.price, 0);
+
+      document.getElementById('receipt-player-name').textContent = state.playerName;
+      document.getElementById('receipt-mission-name').textContent = mission.title;
+      document.getElementById('receipt-correct-count').textContent = `${correctCount} Barang`;
+      document.getElementById('receipt-total-price').textContent = `RM ${totalPrice.toFixed(2)}`;
+      document.getElementById('receipt-coin-breakdown').textContent = `+${itemCoins} syiling barang + ${bonusCoins} bonus lengkap!`;
+      document.getElementById('receipt-coins-earned').textContent = `+${missionCoinsEarned}`;
+
+      const starsHtml = [1, 2, 3].map(n =>
+        `<span class="${n <= starCount ? 'scale-110 drop-shadow' : 'opacity-25 grayscale'}">⭐</span>`
+      ).join('');
+      document.getElementById('receipt-stars').innerHTML = starsHtml;
+
+      document.getElementById('receipt-items-list').innerHTML = state.cart.map(item => `
+        <li class="flex items-center justify-between bg-white px-3 py-1.5 rounded-xl border border-amber-200">
+          <span class="font-display font-bold text-sm text-slate-700">RM ${item.price.toFixed(2)}</span>
+          <span class="jawi-text text-xl sm:text-2xl font-bold text-purple-950">${item.jawi}</span>
+        </li>
+      `).join('');
+
+      const nextBtn = document.getElementById('btn-next-mission');
+      if (state.currentMissionIdx < MISSIONS.length - 1) {
+        nextBtn.innerHTML = '<span>🚀</span> MISI SETERUSNYA';
+      } else {
+        nextBtn.innerHTML = '<span>🏅</span> TUNTUT LENCANA JUARA';
+      }
+
+      showScreen('screen-receipt');
+      sound.playVictory();
+      launchConfetti();
+    }
+
+    function handleNextMission() {
+      sound.playClick();
+      if (state.currentMissionIdx < MISSIONS.length - 1) {
+        setupMission(state.currentMissionIdx + 1);
+      } else {
+        // Tamat ketiga-tiga misi -> Papar Lencana Khas
+        document.getElementById('grand-badge-summary').textContent =
+          `Syabas ${state.playerName}! Anda berjaya menamatkan ketiga-tiga misi membeli-belah Jawi dengan cemerlang!`;
+        document.getElementById('grand-total-coins').textContent = `${state.totalCoins} Syiling`;
+        document.getElementById('modal-grand-badge').classList.remove('hidden');
+        sound.playVictory();
+        launchConfetti();
+      }
+    }
+
+    function restartWholeGame() {
+      sound.playClick();
+      document.getElementById('modal-grand-badge').classList.add('hidden');
+      document.getElementById('modal-trolley').classList.add('hidden');
+      document.getElementById('modal-mission-intro').classList.add('hidden');
+      state.totalCoins = 0;
+      state.usedItemIdsAcrossMissions.clear();
+      showScreen('screen-start');
+    }
+
+    function launchConfetti() {
+      const layer = document.getElementById('confetti-layer');
+      layer.innerHTML = '';
+      const colors = ['#a855f7', '#facc15', '#22c55e', '#38bdf8', '#f43f5e'];
+
+      for (let i = 0; i < 42; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece rounded-sm';
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.width = `${8 + Math.random() * 8}px`;
+        piece.style.height = `${8 + Math.random() * 10}px`;
+        piece.style.backgroundColor = colors[i % colors.length];
+        piece.style.animationDuration = `${2.2 + Math.random() * 2}s`;
+        piece.style.animationDelay = `${Math.random() * 0.6}s`;
+        layer.appendChild(piece);
+      }
+
+      setTimeout(() => {
+        layer.innerHTML = '';
+      }, 4500);
+    }
+  </script>
+</body>
+</html>
